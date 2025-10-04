@@ -10,7 +10,7 @@ import { RoleGuard } from 'src/auth/role.guard';
   providers: [
     // if there's dependency injection use this:
     // { provide: APP_GUARD, useClass: AuthGuard }
-    { provide: APP_GUARD, useClass: RoleGuard }
+    { provide: APP_GUARD, useClass: AuthGuard }
     // { provide: APP_PIPE, useClass: ValidationPipe },
     // { provide: APP_FILTER, useClass:  }
     //  { provide: APP_INTERCEPTOR, useClass }
