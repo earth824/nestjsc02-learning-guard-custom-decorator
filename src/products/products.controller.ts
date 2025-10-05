@@ -1,16 +1,22 @@
 import {
+  BadRequestException,
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Post,
   Put,
   Req,
   SetMetadata,
-  UseGuards
+  UseFilters,
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RoleGuard } from 'src/auth/role.guard';
+import { NotFoundFilter } from 'src/common/filters/not-found.filter';
+import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 import { CurrentUser } from 'src/current-user.decorator';
 import { CurrentUserDto } from 'src/current-user.dto';
 
@@ -36,11 +42,18 @@ export class ProductsController {
     // return 'Created Product';
   }
 
-  @SetMetadata('ROLE_KEY', 'user')
+  // @UseFilters(NotFoundFilter)
+  @SetMetadata('IS_PUBLIC_KEY', true)
   // @Roles('customer')
+  @UseInterceptors(TransformInterceptor)
   @Get()
   findAll() {
-    return 'Get All Product';
+    // throw new BadRequestException({
+    //   code: 'PRODUCT_NOT_FOUND',
+    //   details: 'cannot find product'
+    // });
+    console.log('INSIDE: Controller');
+    return 'Get All Product'; // { data: "Get All Product" }
   }
 
   @Delete()

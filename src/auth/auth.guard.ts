@@ -49,23 +49,23 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
     // Bearer jwt_token ===> ['Bearer', 'jwt_token']
-    // const jwt = request.headers.authorization?.split(' ')[1];
-    // if (!jwt) throw new UnauthorizedException('JWT is required');
-    // try {
-    //   const payload = await this.jwtService.verifyAsync<{ sub: string }>(jwt);
-    //   // request.user = payload;
-    // } catch (error) {
-    //   if (error instanceof TokenExpiredError) {
-    //     throw new UnauthorizedException({
-    //       message: 'token expired',
-    //       code: 'TOKEN_EXPIRED'
-    //     });
-    //   }
-    //   throw new UnauthorizedException({
-    //     message: 'invalid token. please login again',
-    //     code: 'INVALID_JWT'
-    //   });
-    // }
+    const jwt = request.headers.authorization?.split(' ')[1];
+    if (!jwt) throw new UnauthorizedException('JWT is required');
+    try {
+      const payload = await this.jwtService.verifyAsync<{ sub: string }>(jwt);
+      // request.user = payload;
+    } catch (error) {
+      if (error instanceof TokenExpiredError) {
+        throw new UnauthorizedException({
+          message: 'token expired',
+          code: 'TOKEN_EXPIRED'
+        });
+      }
+      throw new UnauthorizedException({
+        message: 'invalid token. please login again',
+        code: 'INVALID_JWT'
+      });
+    }
 
     // verify jwt: jwtService
 
